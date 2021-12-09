@@ -245,7 +245,11 @@ public class MockHandler implements ServerHandler {
         engine.setVariable(ScenarioEngine.REQUEST_URL_BASE, req.getUrlBase());
         engine.setVariable(ScenarioEngine.REQUEST_URI, req.getPath());
         engine.setVariable(ScenarioEngine.REQUEST_METHOD, req.getMethod());
-        engine.setVariable(ScenarioEngine.REQUEST_HEADERS, req.getHeaders());
+        Map<String,List<String>> insensitiveHeaders = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+		for(Map.Entry<String, List<String>> entry : req.getHeaders().entrySet()) {
+			insensitiveHeaders.put(entry.getKey(), entry.getValue());        		
+		}
+		engine.setVariable(ScenarioEngine.REQUEST_HEADERS, insensitiveHeaders);		
         engine.setVariable(ScenarioEngine.REQUEST, req.getBodyConverted());
         engine.setVariable(REQUEST_PARAMS, req.getParams());
         engine.setVariable(REQUEST_BYTES, req.getBody());
